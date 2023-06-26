@@ -11,12 +11,12 @@ date
 
 threads=10
 famID="C019-CHA-E19"
-hifi=`ls /slurm/home/zju/zhanglab/wudongya/APG/PB/CCS/${famID}-01/*.filt.fastq.gz |xargs`
-ont=`ls /slurm/home/zju/zhanglab/wudongya/APG/Nanopore/${famID}-01/*pass_100k.fastq.gz |xargs | sed "s/ /,/g"`
-h1=`ls /slurm/home/zju/zhanglab/wudongya/APG/HiC/${famID}-01/*_1.clean.fq.gz |xargs | sed "s/ /,/g"`
-h2=`ls /slurm/home/zju/zhanglab/wudongya/APG/HiC/${famID}-01/*_2.clean.fq.gz |xargs | sed "s/ /,/g"`
-yak2="/slurm/home/zju/zhanglab/wudongya/APG/NGS/${famID}-02/2update.yak"
-yak3="/slurm/home/zju/zhanglab/wudongya/APG/NGS/${famID}-03/3update.yak"
+hifi=`ls /YOUR_PATH/PB/CCS/${famID}-01/*.filt.fastq.gz |xargs`
+ont=`ls /YOUR_PATH/Nanopore/${famID}-01/*pass_100k.fastq.gz |xargs | sed "s/ /,/g"`
+h1=`ls /YOUR_PATH/HiC/${famID}-01/*_1.clean.fq.gz |xargs | sed "s/ /,/g"`
+h2=`ls /YOUR_PATH/HiC/${famID}-01/*_2.clean.fq.gz |xargs | sed "s/ /,/g"`
+yak2="/YOUR_PATH/NGS/${famID}-02/2update.yak"
+yak3="/YOUR_PATH/NGS/${famID}-03/3update.yak"
 
 echo `hifiasm --version`
 echo $famID
@@ -25,7 +25,7 @@ echo $ont
 echo $h1
 echo $h2
 
-/slurm/home/zju/zhanglab/wudongya/software/anaconda/bin/hifiasm --h1 ${h1} --h2 ${h2} -o ${famID}_hifiasm_hic_ont -t ${threads} --ul ${ont} ${hifi}
+/YOUR_PATH/software/anaconda/bin/hifiasm --h1 ${h1} --h2 ${h2} -o ${famID}_hifiasm_hic_ont -t ${threads} --ul ${ont} ${hifi}
 
 echo "hifiasm_hic_ont done!"
 date
@@ -36,5 +36,5 @@ for i in `ls | grep "p_ctg.gfa" | perl -npe "s/.p_ctg.gfa//"`; do awk '/^S/{prin
 for i in `ls | grep "p_ctg.gfa" | perl -npe "s/.p_ctg.gfa//"`; do yak trioeval ${yak2} ${yak3} ${i}_ctg.fa > ${i}_ctg.ye ; done
 
 echo "TrioC\n"
-perl /slurm/home/zju/zhanglab/wudongya/APG/assembly/R5a_correct_trioReassign.pl ${famID}
+perl /YOUR_PATH/script/R5a_correct_trioReassign.pl ${famID}
 echo "TrioC finished!\n"
