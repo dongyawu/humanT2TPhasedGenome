@@ -264,7 +264,7 @@ sub rev_and_com {
 
 system(qq(rm -f $paf.sort));
 system(qq(N50 $paf.fasta $paf.n50 10000));
-system(qq(sh /slurm/home/zju/zhanglab/wudongya/software/asm2ref/unimap/run_unimap_dotplot.sh /slurm/users/wudongya/APG/reference/CHM13v2m.fasta ${prefix}.paf.fasta ${prefix}_CHM13v2m));
+system(qq(sh /YOUR_PATH/software/asm2ref/unimap/run_unimap_dotplot.sh /YOUR_PATH/reference/CHM13v2m.fasta ${prefix}.paf.fasta ${prefix}_CHM13v2m));
 
 
 
