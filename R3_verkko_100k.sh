@@ -13,11 +13,11 @@ famID="C012-CHA-E12"
 date
 
 ##build specific k-mer db
-#hapmers.sh /slurm/home/zju/zhanglab/wudongya/APG/NGS/${famID}-02/2.meryl /slurm/users/wudongya/APG/NGS/${famID}-03/3.meryl /slurm/home/zju/zhanglab/wudongya/APG/NGS/${famID}-01/1.meryl
+#hapmers.sh /YOUR_PATH/NGS/${famID}-02/2.meryl /YOUR_PATH/NGS/${famID}-03/3.meryl /YOUR_PATH/NGS/${famID}-01/1.meryl
 
 ##verkko run
-hifi=`ls /slurm/home/zju/zhanglab/wudongya/APG/PB/CCS/${famID}-01/*.filt.fastq.gz |xargs`
-ont=`ls /slurm/home/zju/zhanglab/wudongya/APG/Nanopore/${famID}-01/*pass_100k.fastq.gz |xargs`
+hifi=`ls /YOUR_PATH/PB/CCS/${famID}-01/*.filt.fastq.gz |xargs`
+ont=`ls /YOUR_PATH/Nanopore/${famID}-01/*pass_100k.fastq.gz |xargs`
 
 dir='verkko'
 
@@ -28,8 +28,8 @@ date
 
 ###statistic and synteny plot
 
-yak2="/slurm/home/zju/zhanglab/wudongya/APG/NGS/${famID}-02/2update.yak"
-yak3="/slurm/home/zju/zhanglab/wudongya/APG/NGS/${famID}-03/3update.yak"
+yak2="/YOUR_PATH/NGS/${famID}-02/2update.yak"
+yak3="/YOUR_PATH/NGS/${famID}-03/3update.yak"
 
 for i in `ls ${dir}/| grep "fasta" | grep "haplotype"|perl -npe "s/.fasta//"`;
 do
@@ -38,7 +38,7 @@ N50 $dir/${i}.fasta $dir/$famID"_"${i}.n50 10000 ;
 cat $dir/${i}.fasta | seqkit fx2tab | cut -f 2 | sed -r 's/n+/\n/gi'  | cat -n | seqkit tab2fx | seqkit replace -p "(.+)" -r "Contig{nr}" > $dir/${famID}_${i}_contig.fasta
 yak trioeval ${yak2} ${yak3} $dir/${famID}_${i}_contig.fasta -t ${threads} > $dir/$famID"_"${i}.ye
 echo "print Syntent for ${i}!"
-sh /slurm/home/zju/zhanglab/wudongya/software/asm2ref/unimap/run_unimap_dotplot.sh /slurm/users/wudongya/APG/reference/CHM13v2m.fasta $dir/${famID}_${i}_contig.fasta $dir/${famID}"_"${i} ;
+sh /YOUR_PATH/software/asm2ref/unimap/run_unimap_dotplot.sh /slurm/users/wudongya/APG/reference/CHM13v2m.fasta $dir/${famID}_${i}_contig.fasta $dir/${famID}"_"${i} ;
 done
 
 rm -rf 1*
