@@ -10,10 +10,10 @@ date
 
 threads=100
 famID="C012-CHA-E12"
-hifi=`ls /slurm/home/zju/zhanglab/wudongya/APG/PB/CCS/${famID}-01/*.filt.fastq.gz |xargs`
-ont=`ls /slurm/home/zju/zhanglab/wudongya/APG/Nanopore/${famID}-01/*pass_100k.fastq.gz |xargs | sed "s/ /,/g"`
-yak2="/slurm/home/zju/zhanglab/wudongya/APG/NGS/${famID}-02/2update.yak"
-yak3="/slurm/home/zju/zhanglab/wudongya/APG/NGS/${famID}-03/3update.yak"
+hifi=`ls /YOUR_PATH/PB/CCS/${famID}-01/*.filt.fastq.gz |xargs`
+ont=`ls /YOUR_PATH/Nanopore/${famID}-01/*pass_100k.fastq.gz |xargs | sed "s/ /,/g"`
+yak2="/YOUR_PATH/NGS/${famID}-02/2update.yak"
+yak3="/YOUR_PATH/NGS/${famID}-03/3update.yak"
 
 echo `hifiasm --version`
 echo $famID
@@ -23,7 +23,7 @@ if [ ! -f "$yak2"]; then
 echo "Error: no trio information!"
 fi
 
-/slurm/home/zju/zhanglab/wudongya/software/anaconda/bin/hifiasm -1 ${yak2} -2 ${yak3} -o ${famID}_hifiasm_trio_ont -t ${threads} --ul ${ont} ${hifi}
+/YOUR_PATH/software/anaconda/bin/hifiasm -1 ${yak2} -2 ${yak3} -o ${famID}_hifiasm_trio_ont -t ${threads} --ul ${ont} ${hifi}
 
 echo "hifiasm_trio_ont done!"
 date
@@ -40,11 +40,11 @@ for hap in `seq 1 2`
 do
 	echo "print Syntent for Hap${hap}!"
 	#CHM13v2
-	ref="/slurm/home/zju/zhanglab/wudongya/APG/reference/CHM13v2m.fasta"
+	ref="/YOUR_PATH/reference/CHM13v2m.fasta"
 	que=$famID"_hifiasm_trio_ont.dip.hap${hap}_ctg.fa"
 	output_prefix=$famID"_hifiasm_trio_ont.dip.hap${hap}"
 	##unimap
-	sh /slurm/home/zju/zhanglab/wudongya/software/asm2ref/unimap/run_unimap_dotplot.sh  $ref $que $output_prefix
+	sh /YOUR_PATH/software/asm2ref/unimap/run_unimap_dotplot.sh  $ref $que $output_prefix
 	cat $output_prefix.unimap.paf | sort -k6,6 -k8,8n | awk '$2>10000 && $10>500' > $output_prefix.unimap.sort.fil.paf
 done
 
