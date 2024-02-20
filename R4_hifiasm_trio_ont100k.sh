@@ -1,9 +1,10 @@
 #!/bin/sh
 #SBATCH --job-name=R4
+#SBATCH --partition=cpu64
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=100
-#SBATCH --mem=500g
+#SBATCH --cpus-per-task=30
+#SBATCH --mem=400g
 #SBATCH --time=900:00:00
 
 date
