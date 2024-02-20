@@ -2,7 +2,7 @@
 ## Data QC and preparation
 ```01_ngs_fastp_yak_meryl.sh```: NGS qc and k-mer library building; 
 
-```03_hifi_filt_stat.sh```: HiFi reads filtring; 
+```03_hifi_filt_stat.sh```: HiFi reads filtering; 
 
 ```04_ont_filt_stat.sh```: ONT reads filtering; 
 
