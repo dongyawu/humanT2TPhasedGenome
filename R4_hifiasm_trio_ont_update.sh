@@ -1,5 +1,5 @@
 #!/bin/sh
-#SBATCH --job-name=R4u_C012
+#SBATCH --job-name=R4
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=100
@@ -8,12 +8,17 @@
 
 date
 
-threads=100
-famID="C012-CHA-E12"
-hifi=`ls /YOUR_PATH/PB/CCS/${famID}-01/*.filt.fastq.gz |xargs`
-ont=`ls /YOUR_PATH/Nanopore/${famID}-01/*pass_100k.fastq.gz |xargs | sed "s/ /,/g"`
-yak2="/YOUR_PATH/NGS/${famID}-02/2update.yak"
-yak3="/YOUR_PATH/NGS/${famID}-03/3update.yak"
+threads=30
+famID="XXX"
+
+##hifi
+hifi=`ls /YOUR_PATH/*.filt.fastq.gz |xargs`
+##ONT(ultra-long, >100kb)
+ont=`ls /YOUR_PATH/*pass_100k.fastq.gz |xargs | sed "s/ /,/g"`
+##paternal kmers (yak)
+yak2="/YOUR_PATH/2.yak"
+##maternal kmers (yak)
+yak3="/YOUR_PATH/3.yak"
 
 echo `hifiasm --version`
 echo $famID
@@ -23,7 +28,7 @@ if [ ! -f "$yak2"]; then
 echo "Error: no trio information!"
 fi
 
-/YOUR_PATH/software/anaconda/bin/hifiasm -1 ${yak2} -2 ${yak3} -o ${famID}_hifiasm_trio_ont -t ${threads} --ul ${ont} ${hifi}
+hifiasm -1 ${yak2} -2 ${yak3} -o ${famID}_hifiasm_trio_ont -t ${threads} --ul ${ont} ${hifi}
 
 echo "hifiasm_trio_ont done!"
 date
@@ -31,7 +36,7 @@ date
 ##################
 ### CONVERT GFA to FA && N50 STATISTICS
 for i in `ls | grep "p_ctg.gfa" | perl -npe "s/.p_ctg.gfa//"`; do awk '/^S/{print ">"$2"\n"$3}' ${i}.p_ctg.gfa | fold > ${i}_ctg.fa ; N50 ${i}_ctg.fa ${i}_ctg.n50 10000 ; done
-
+### SER
 for i in `ls | grep "p_ctg.gfa" | perl -npe "s/.p_ctg.gfa//"`; do yak trioeval ${yak2} ${yak3} ${i}_ctg.fa > ${i}_ctg.ye ; done
 
 ###################
@@ -39,12 +44,12 @@ for i in `ls | grep "p_ctg.gfa" | perl -npe "s/.p_ctg.gfa//"`; do yak trioeval $
 for hap in `seq 1 2`
 do
 	echo "print Syntent for Hap${hap}!"
-	#CHM13v2
-	ref="/YOUR_PATH/reference/CHM13v2m.fasta"
+	#CHM13v2 as reference (human)
+	ref="/YOUR_PATH/CHM13v2.fasta"
 	que=$famID"_hifiasm_trio_ont.dip.hap${hap}_ctg.fa"
 	output_prefix=$famID"_hifiasm_trio_ont.dip.hap${hap}"
 	##unimap
-	sh /YOUR_PATH/software/asm2ref/unimap/run_unimap_dotplot.sh  $ref $que $output_prefix
+	sh /YOUR_PATH/unimap/run_unimap_dotplot.sh  $ref $que $output_prefix
 	cat $output_prefix.unimap.paf | sort -k6,6 -k8,8n | awk '$2>10000 && $10>500' > $output_prefix.unimap.sort.fil.paf
 done
 
