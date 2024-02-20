@@ -1,26 +1,24 @@
 #!/bin/sh
-#SBATCH --job-name=flyeC019_binONT
+#SBATCH --job-name=flye_binONT
 #SBATCH --partition=all
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=20
-#SBATCH --mem=100g
+#SBATCH --cpus-per-task=40
+#SBATCH --mem=800g
 #SBATCH --time=900:00:00
 
 date
-threads=20
-famID="C019-CHA-E19"
-yak2="/YOUR_PATH/NGS/${famID}-02/2update.yak"
-yak3="/YOUR_PATH/NGS/${famID}-03/3update.yak"
-dir="/YOUR_PATH/Nanopore/${famID}-01/binning_100k/haplotype"
-
-#rm -rf $dir/0-kmers
+threads = 40
+famID = "XXX"
+yak2 = "/YOUR_PATH/NGS/${famID}-02/2update.yak"
+yak3 = "/YOUR_PATH/NGS/${famID}-03/3update.yak"
+dir = "/YOUR_PATH/Nanopore/${famID}-01/binning_100k/haplotype"
 
 #echo $dir/haplotype-Pat.fasta.gz
-#flye --nano-raw $dir/haplotype-Pat.fasta.gz --genome-size 3g --threads ${threads} --out-dir Pat
+flye --nano-raw $dir/haplotype-Pat.fasta.gz --genome-size 3g --threads ${threads} --out-dir Pat
 
 #echo $dir/haplotype-Mat.fasta.gz
-#flye --nano-raw $dir/haplotype-Mat.fasta.gz --genome-size 3g --threads ${threads} --out-dir Mat
+flye --nano-raw $dir/haplotype-Mat.fasta.gz --genome-size 3g --threads ${threads} --out-dir Mat
 
 echo "flye done!"
 date
@@ -34,4 +32,3 @@ yak trioeval ${yak2} ${yak3} ${famID}_flye_${i}_ctg.fasta -t ${threads} > ${famI
 echo "print Syntent for ${i}!"
 sh /YOUR_PATH/software/asm2ref/unimap/run_unimap_dotplot.sh /YOUR_PATH/reference/CHM13v2m.fasta ${famID}_flye_${i}_ctg.fasta ${famID}_flye_${i}_ctg
 done
-
